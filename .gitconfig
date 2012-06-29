@@ -1,0 +1,23 @@
+[user]
+	name = Jared Habeck
+	email = jhabeck@gmail.com
+[credential]
+	helper = osxkeychain
+[core]
+	excludesfile = ~/.gitignore
+	editor = vim
+	whitespace = warn
+[branch]
+	autosetuprebase = always
+[color]
+	ui = auto
+[help]
+	autocorrect = 10
+[github]
+	user = jaredhabeck
+[merge]
+	summary = true
+[push]
+	default = current
+[rebase]
+	autosquash = true
