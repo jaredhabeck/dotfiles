@@ -1,7 +1,7 @@
 call pathogen#infect()
 
 syntax on
-colorscheme molokai
+colorscheme vividchalk
 filetype plugin indent on
 
 command! -bar -range=% Trim :<line1>,<line2>s/\s\+$//e
@@ -105,7 +105,6 @@ augroup vimrc
   autocmd FileType cucumber               setlocal et sw=2 sts=2
   autocmd FileType gitcommit              setlocal spell
   autocmd FileType gitconfig              setlocal noet sw=8
-  autocmd FileType ruby                   setlocal comments=:#\  tw=79
   autocmd FileType sh,csh,zsh             setlocal et sw=2 sts=2
   autocmd FileType vim                    setlocal et sw=2 sts=2 keywordprg=:help
 
