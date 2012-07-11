@@ -33,6 +33,8 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-
 zstyle ':completion:*:*:*:*:processes' command "ps -u `whoami` -o pid,user,comm -w -w"
 zstyle ':completion:*:ssh:*' tag-order hosts users
 zstyle ':completion:*:ssh:*' group-order hosts-domain hosts-host users hosts-ipaddr
+# Case-insensitive completion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 # ignore completion functions (until the _ignored completer)
 zstyle ':completion:*:functions' ignored-patterns '_*'
@@ -89,6 +91,9 @@ alias sync='rsync -rvu ~/Code/SD/client/dfb jared@yarbles.org:/var/www/www.yarbl
 
 # create and enter dir
 mcd() { mkdir -p "${@}" && cd "${1}"; }
+
+# history from beginning with optional grep
+h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
 # TODO get rid of rvm?
 if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then source "$HOME/.rvm/scripts/rvm" ; fi
