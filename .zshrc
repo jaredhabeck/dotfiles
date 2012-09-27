@@ -9,6 +9,7 @@ path=(
   /usr/sbin
   /sbin
   /usr/X11/bin
+  /usr/local/share/npm/bin
 )
 
 # this is, I believe, totally unnecessary.
