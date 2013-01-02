@@ -10,6 +10,7 @@ path=(
   /sbin
   /usr/X11/bin
   /usr/local/share/npm/bin
+  /usr/local/mysql/bin
 )
 
 # this is, I believe, totally unnecessary.

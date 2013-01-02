@@ -55,10 +55,8 @@ if &statusline == ''
 endif
 " Make Esc work faster
 set ttimeoutlen=50
-if exists('+undofile')
-  set undofile
-  set undodir=$TEMP
-endif
+set undofile
+set undodir=~/.vim/undodir
 " emacs style menu completion
 set wildmenu
 set wildmode=list:longest,full
@@ -73,6 +71,11 @@ let g:is_bash = 1
 let g:ruby_minlines = 500
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_rails = 1
+
+" CtrlP options
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
 
 " If at end of line, decrease indent, else <Del>
 inoremap <silent> <C-D> <C-R>=col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"<CR>
@@ -107,6 +110,7 @@ augroup vimrc
   autocmd FileType gitconfig              setlocal noet sw=8
   autocmd FileType sh,csh,zsh             setlocal et sw=2 sts=2
   autocmd FileType vim                    setlocal et sw=2 sts=2 keywordprg=:help
+  autocmd FileType ruby                   setlocal comments=:#\  tw=79
 
   autocmd Syntax   css  syn sync minlines=50
 
@@ -124,5 +128,6 @@ augroup vimrc
   autocmd User Rails Rnavcommand serializer app/serializers -suffix=_serializer.rb -default=model()
   autocmd User Rails Rnavcommand support spec/support features/support -default=env
   autocmd User Rails Rnavcommand worker app/workers -suffix=_worker.rb -default=model()
+  autocmd User Rails Rnavcommand fabricator spec/fabricators -suffix=_fabricator.rb -default=model()
   autocmd User Fugitive command! -bang -bar -buffer -nargs=* Gpr :Git<bang> pull --rebase <args>
 augroup END
