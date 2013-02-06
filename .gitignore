@@ -4,4 +4,4 @@
 .DS_Store
 tags
 .netrwhist
-.vim/undodir/
+.vim/undodir/*
