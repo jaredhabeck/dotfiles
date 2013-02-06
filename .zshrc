@@ -58,7 +58,7 @@ bindkey '\ep' up-line-or-search
 bindkey '\en' down-line-or-search
 bindkey '\ew' kill-region
 
-PROMPT='%{$fg_bold[cyan]%}Ⓙ  %{$fg_bold[red]%}[%W %t]%{$fg_bold[green]%}%p%{$fg[green]%} %{$fg_bold[cyan]%}$(git_prompt_info "(%s)")%{$fg_bold[green]%}%  %~ $ %{$reset_color%}'
+PROMPT='%{$fg_bold[cyan]%}Ⓙ  %{$fg_bold[red]%}[%W %t]%{$fg_bold[green]%}%p%{$fg[green]%} %{$fg_bold[cyan]%}$(git_prompt_info "(%s)")%{$fg_bold[green]%}%  %c $ %{$reset_color%}'
 
 # history
 HISTFILE=~/.zsh_history
