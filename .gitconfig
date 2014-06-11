@@ -1,12 +1,12 @@
 [user]
 	name = Jared Habeck
 	email = jhabeck@gmail.com
-[credential]
-	helper = osxkeychain
 [core]
 	excludesfile = ~/.gitignore
 	editor = vim
 	whitespace = warn
+[credential]
+	helper = cache
 [branch]
 	autosetuprebase = always
 [color]

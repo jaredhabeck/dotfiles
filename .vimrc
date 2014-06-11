@@ -1,7 +1,8 @@
 call pathogen#infect()
 
 syntax on
-colorscheme vividchalk
+set background=dark
+colorscheme solarized
 filetype plugin indent on
 
 command! -bar -range=% Trim :<line1>,<line2>s/\s\+$//e
@@ -28,7 +29,7 @@ set display=lastline
 if &grepprg ==# 'grep -n $* /dev/null'
   set grepprg=grep\ -rnH\ --exclude='.*.swp'\ --exclude='*~'\ --exclude='*.log'\ --exclude=tags\ $*\ /dev/null
 endif
-set guifont=Monaco:h14
+set guifont=Monaco\ 13
 set guioptions-=T guioptions-=e guioptions-=L guioptions-=r
 set hidden
 set incsearch
@@ -72,11 +73,6 @@ let g:ruby_minlines = 500
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_rails = 1
 
-" CtrlP options
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
-
 " If at end of line, decrease indent, else <Del>
 inoremap <silent> <C-D> <C-R>=col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"<CR>
 cnoremap          <C-D> <Del>
@@ -116,7 +112,6 @@ augroup vimrc
   autocmd FileType gitconfig              setlocal noet sw=8
   autocmd FileType sh,csh,zsh             setlocal et sw=2 sts=2
   autocmd FileType vim                    setlocal et sw=2 sts=2 keywordprg=:help
-  autocmd FileType ruby                   setlocal comments=:#\  tw=79
 
   autocmd Syntax   css  syn sync minlines=50
 
@@ -137,3 +132,6 @@ augroup vimrc
   autocmd User Rails Rnavcommand fabricator spec/fabricators -suffix=_fabricator.rb -default=model()
   autocmd User Fugitive command! -bang -bar -buffer -nargs=* Gpr :Git<bang> pull --rebase <args>
 augroup END
+
+source $VIMRUNTIME/mswin.vim
+behave mswin

@@ -8,9 +8,6 @@ path=(
   /bin
   /usr/sbin
   /sbin
-  /usr/X11/bin
-  /usr/local/share/npm/bin
-  /usr/local/mysql/bin
 )
 
 # this is, I believe, totally unnecessary.
@@ -20,10 +17,9 @@ fpath=(
 
 source "$HOME/.jaredrc"
 
-# color term
-export CLICOLOR=1
-export LSCOLORS=Dxfxcxdxbxegedabadacad
-export ZLS_COLORS=$LSCOLORS
+# linux ls color equivalent to LSCOLORS
+export LS_COLORS="di=01;34:ln=35;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43:su=0;41:sg=0;43:tw=0;42:ow=0;43:"
+# Do we need Linux or BSD Style?
 export LC_CTYPE=en_US.UTF-8
 export LESS=FRX
 
@@ -58,7 +54,8 @@ bindkey '\ep' up-line-or-search
 bindkey '\en' down-line-or-search
 bindkey '\ew' kill-region
 
-PROMPT='%{$fg_bold[cyan]%}Ⓙ  %{$fg_bold[red]%}[%W %t]%{$fg_bold[green]%}%p%{$fg[green]%} %{$fg_bold[cyan]%}$(git_prompt_info "(%s)")%{$fg_bold[green]%}%  %c $ %{$reset_color%}'
+# %  $
+PROMPT='%{$fg_bold[green]%}%c %{$fg_bold[cyan]%}$(git_prompt_info "(%s)") $ %{$reset_color%}'
 
 # history
 HISTFILE=~/.zsh_history
@@ -96,7 +93,5 @@ mcd() { mkdir -p "${@}" && cd "${1}"; }
 
 # history from beginning with optional grep
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
-
-# TODO get rid of rvm?
-if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then source "$HOME/.rvm/scripts/rvm" ; fi
-
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
