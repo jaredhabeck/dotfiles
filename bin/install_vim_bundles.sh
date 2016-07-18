@@ -52,5 +52,7 @@ get_bundle vim-scripts bufexplorer.zip
 #get_bundle gregsexton gitv
 #get_bundle nathanaelkane vim-indent-guides
 #get_bundle tmallen transmit-vim
+get_bundle joonty vdebug
+get_bundle kien ctrlp.vim
 
 vim -c 'call pathogen#helptags()|q'

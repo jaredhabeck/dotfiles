@@ -29,7 +29,6 @@ set display=lastline
 if &grepprg ==# 'grep -n $* /dev/null'
   set grepprg=grep\ -rnH\ --exclude='.*.swp'\ --exclude='*~'\ --exclude='*.log'\ --exclude=tags\ $*\ /dev/null
 endif
-set guifont=Monaco\ 13
 set guioptions-=T guioptions-=e guioptions-=L guioptions-=r
 set hidden
 set incsearch
@@ -73,6 +72,8 @@ let g:ruby_minlines = 500
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_rails = 1
 
+
+
 " If at end of line, decrease indent, else <Del>
 inoremap <silent> <C-D> <C-R>=col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"<CR>
 cnoremap          <C-D> <Del>
@@ -84,6 +85,8 @@ cnoremap          <C-F> <Right>
 " Enable TAB indent and SHIFT-TAB unindent
 vnoremap <silent> <TAB> >gv
 vnoremap <silent> <S-TAB> <gv
+
+vnoremap <Leader>a y:Ack! <C-r>=fnameescape(@")<CR><CR>
 
 " Change dir to currently edited file for all vim windows
 nnoremap ,cd :cd %:p:h<CR>:pwd<CR>

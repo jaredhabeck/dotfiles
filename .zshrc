@@ -96,6 +96,8 @@ alias heroku='nocorrect heroku'
 alias cdc='cd ~/Code'
 alias sync='rsync -rvu ~/Code/SD/client/dfb jared@yarbles.org:/var/www/www.yarbles.org/'
 alias gcdiff=git_pretty_cdiff
+#alias python=python3
+#alias pip=pip3
 
 # create and enter dir
 mcd() { mkdir -p "${@}" && cd "${1}"; }
