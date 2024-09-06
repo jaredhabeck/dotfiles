@@ -1,106 +1,88 @@
-# set the path
-path=(
-  "$HOME/bin"
-  /usr/local/bin
-  /usr/local/sbin
-  /opt/local/bin
-  /usr/bin
-  /bin
-  /usr/sbin
-  /sbin
-)
-
-# this is, I believe, totally unnecessary.
-fpath=(
-  $fpath
-)
-
-source "$HOME/.jaredrc"
-
-if uname -a | grep -q Darwin; then
-  source "$HOME/.dotfiles/.osxrc"
-else
-  source "$HOME/.dotfiles/.linuxrc"
-fi
-
-# Do we need Linux or BSD Style?
-export LC_CTYPE=en_US.UTF-8
-export LESS=FRX
-
-# make with the nice completion
-autoload -U compinit; compinit
-
-# Completion for kill-like commands
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
-zstyle ':completion:*:*:*:*:processes' command "ps -u `whoami` -o pid,user,comm -w -w"
-zstyle ':completion:*:ssh:*' tag-order hosts users
-zstyle ':completion:*:ssh:*' group-order hosts-domain hosts-host users hosts-ipaddr
-# Case-insensitive completion
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-# ignore completion functions (until the _ignored completer)
-zstyle ':completion:*:functions' ignored-patterns '_*'
-
-# make with the pretty colors
-autoload colors; colors
-
-# options
-setopt appendhistory autocd extendedglob histignoredups nonomatch prompt_subst interactivecomments
-
-# Bindings
-# external editor support
-autoload edit-command-line
-zle -N edit-command-line
-bindkey '^x^e' edit-command-line
-
-# Partial word history completion
-bindkey '\ep' up-line-or-search
-bindkey '\en' down-line-or-search
-bindkey '\ew' kill-region
-
-# %  $
-PROMPT='%{$fg_bold[green]%}%c %{$fg_bold[cyan]%}$(git_prompt_info "(%s)") $ %{$reset_color%}'
-
-# history
-HISTFILE=~/.zsh_history
-HISTSIZE=5000
+HISTFILE=~/.histfile
+HISTSIZE=10000
 SAVEHIST=10000
-setopt APPEND_HISTORY
-setopt INC_APPEND_HISTORY
+setopt autocd extendedglob nomatch notify prompt_subst
+unsetopt beep
+bindkey -e
+zstyle :compinstall filename '/home/j/.zshrc'
+autoload -Uz compinit
+compinit
+autoload -U colors && colors
 
-# default applications
-(( ${+PAGER}   )) || export PAGER='less'
-(( ${+EDITOR}  )) || export EDITOR='vim'
-export PSQL_EDITOR='vim -c"set syntax=sql"'
+# ctrl-arrow don't work by default on zsh, this makes it so
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
 
-# fxn to take two branches and output git pretty diff
-git_pretty_cdiff() {
-  git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative $1..$2
+git_prompt_info () {
+  local g="$(git rev-parse --git-dir 2>/dev/null)"
+  if [ -n "$g" ]; then
+    local r
+    local b
+    local d
+    local s
+    # Rebasing
+    if [ -d "$g/rebase-apply" ] ; then
+      if test -f "$g/rebase-apply/rebasing" ; then
+        r="|REBASE"
+      fi
+      b="$(git symbolic-ref HEAD 2>/dev/null)"
+    # Interactive rebase
+    elif [ -f "$g/rebase-merge/interactive" ] ; then
+      r="|REBASE-i"
+      b="$(cat "$g/rebase-merge/head-name")"
+    # Merging
+    elif [ -f "$g/MERGE_HEAD" ] ; then
+      r="|MERGING"
+      b="$(git symbolic-ref HEAD 2>/dev/null)"
+    else
+      if [ -f "$g/BISECT_LOG" ] ; then
+        r="|BISECTING"
+      fi
+      if ! b="$(git symbolic-ref HEAD 2>/dev/null)" ; then
+        if ! b="$(git describe --exact-match HEAD 2>/dev/null)" ; then
+          b="$(cut -c1-7 "$g/HEAD")..."
+        fi
+      fi
+    fi
+
+    # Dirty Branch
+    local newfile='?? '
+    if [ -n "$ZSH_VERSION" ]; then
+      newfile='\?\? '
+    fi
+    d=''
+    s=$(git status --porcelain 2> /dev/null)
+    [[ $s =~ "$newfile" ]] && d+='+'
+    [[ $s =~ "M " ]] && d+='*'
+    [[ $s =~ "D " ]] && d+='-'
+
+    if [ -n "${1-}" ]; then
+      printf "$1" "${b##refs/heads/}$r$d"
+    else
+      printf "(%s) " "${b##refs/heads/}$r$d"
+    fi
+  fi
 }
-# aliases
-alias mv='nocorrect mv'       # no spelling correction on mv
-alias cp='nocorrect cp'
-alias mkdir='nocorrect mkdir'
-alias spec='nocorrect spec'
-alias rspec='nocorrect rspec'
-alias ll="ls -l"
-alias la="ls -a"
-alias l.='ls -ld .[^.]*'
-alias lsd='ls -ld *(-/DN)'
-alias md='mkdir -p'
-alias rd='rmdir'
-alias cd..='cd ..'
-alias ..='cd ..'
-alias spec='spec -c'
-alias heroku='nocorrect heroku'
-alias cdc='cd ~/Code'
-alias sync='rsync -rvu ~/Code/SD/client/dfb jared@yarbles.org:/var/www/www.yarbles.org/'
-alias gcdiff=git_pretty_cdiff
 
-# create and enter dir
-mcd() { mkdir -p "${@}" && cd "${1}"; }
 
-# history from beginning with optional grep
-h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+# prompt to add branch name and if changes exist
+autoload -Uz add-zsh-hook vcs_info
+add-zsh-hook precmd vcs_info
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' unstagedstr ' *'
+zstyle ':vcs_info:*' stagedstr ' +'
+zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
+zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
+PROMPT='%~ %F{red}${vcs_info_msg_0_}%f %# '
+
+# use non-package nvim
+export PATH="$PATH:/opt/nvim-linux64/bin"
+
+alias vim=nvim
+alias cdc='cd /home/$USER/code'
+alias gst='git status'
+alias glod='git log --oneline'
+alias gd='git diff'
+alias gco='git checkout'
+alias gp='git push'
+alias gc='git commit'
