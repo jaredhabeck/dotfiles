@@ -1,10 +1,12 @@
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
-setopt autocd extendedglob nomatch notify prompt_subst
+setopt autocd extendedglob nomatch notify prompt_subst dotglob
 unsetopt beep
 bindkey -e
-zstyle :compinstall filename '/home/j/.zshrc'
+zstyle :compinstall filename '/home/$USER/.zshrc'
+# include dotfiles on * ops
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 autoload -Uz compinit
 compinit
 autoload -U colors && colors
@@ -12,6 +14,8 @@ autoload -U colors && colors
 # ctrl-arrow don't work by default on zsh, this makes it so
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
+
+setopt dotglob
 
 git_prompt_info () {
   local g="$(git rev-parse --git-dir 2>/dev/null)"
@@ -78,11 +82,23 @@ PROMPT='%~ %F{red}${vcs_info_msg_0_}%f %# '
 # use non-package nvim
 export PATH="$PATH:/opt/nvim-linux64/bin"
 
+# handy AF tunnel setup, just here as a note to be used further
+#function db() {
+#        ssh -o ExitOnForwardFailure=yes -f -L 5435:$2:5432 $1 sleep 15
+#	psql -h 127.0.0.1 -U $3 -p 5435
+#}
+
 alias vim=nvim
 alias cdc='cd /home/$USER/code'
-alias gst='git status'
-alias glod='git log --oneline'
-alias gd='git diff'
-alias gco='git checkout'
-alias gp='git push'
 alias gc='git commit'
+alias gr='git reset --hard HEAD^'
+alias gcam='git commit -am'
+alias gco='git checkout'
+alias gcob='git checkout -B'
+alias gd='git diff'
+alias glod='git log --oneline'
+alias gp='git push'
+alias gst='git status --short'
+alias apts='apt-cache search --names-only'
+alias maws='aws --profile=metal'
+alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'

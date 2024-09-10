@@ -1,3 +1,4 @@
+vim.opt.background = dark
 vim.opt.cmdheight = 0
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
@@ -38,3 +39,9 @@ vim.opt.redrawtime = 10000 -- Allow more time for loading syntax on large files
 vim.opt.exrc = true
 vim.opt.secure = true
 vim.opt.inccommand = 'split'
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function()
+    vim.opt_local.formatoptions:remove({ 'r', 'o' })
+  end,
+})
