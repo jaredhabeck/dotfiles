@@ -1,12 +1,10 @@
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
-setopt autocd extendedglob nomatch notify prompt_subst dotglob
-unsetopt beep
+setopt autocd nomatch notify prompt_subst dotglob
+unsetopt beep extended_glob
 bindkey -e
 zstyle :compinstall filename '/home/$USER/.zshrc'
-# include dotfiles on * ops
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 autoload -Uz compinit
 compinit
 autoload -U colors && colors
@@ -14,8 +12,6 @@ autoload -U colors && colors
 # ctrl-arrow don't work by default on zsh, this makes it so
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
-
-setopt dotglob
 
 git_prompt_info () {
   local g="$(git rev-parse --git-dir 2>/dev/null)"
@@ -88,7 +84,6 @@ export PATH="$PATH:/opt/nvim-linux64/bin"
 #	psql -h 127.0.0.1 -U $3 -p 5435
 #}
 
-alias vim=nvim
 alias cdc='cd /home/$USER/code'
 alias gc='git commit'
 alias gr='git reset --hard HEAD^'
