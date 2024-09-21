@@ -6,3 +6,4 @@ tags
 .netrwhist
 .vim/undodir/*
 .vim/bundle
+nvim/lazy-lock.json

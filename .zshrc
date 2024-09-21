@@ -73,7 +73,7 @@ zstyle ':vcs_info:*' unstagedstr ' *'
 zstyle ':vcs_info:*' stagedstr ' +'
 zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
 zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
-PROMPT='%~ %F{red}${vcs_info_msg_0_}%f %# '
+PROMPT='%F{cyan}%~%f %F{red}${vcs_info_msg_0_}%f %# '
 
 # use non-package nvim
 export PATH="$PATH:/opt/nvim-linux64/bin"
@@ -84,6 +84,7 @@ export PATH="$PATH:/opt/nvim-linux64/bin"
 #	psql -h 127.0.0.1 -U $3 -p 5435
 #}
 
+alias vim='$(which nvim)'
 alias cdc='cd /home/$USER/code'
 alias gc='git commit'
 alias gr='git reset --hard HEAD^'
