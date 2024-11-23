@@ -9,6 +9,6 @@ return {
     vim.o.background = 'dark'
     require('solarized').setup(opts)
     vim.cmd.colorscheme 'solarized'
-  end,
+  end
 }
 

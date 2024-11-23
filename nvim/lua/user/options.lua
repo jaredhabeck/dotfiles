@@ -39,3 +39,5 @@ vim.opt.redrawtime = 10000 -- Allow more time for loading syntax on large files
 vim.opt.exrc = true
 vim.opt.secure = true
 vim.opt.inccommand = 'split'
+
+vim.cmd([[command! BO silent! execute "%bd|e#|bd#"]])

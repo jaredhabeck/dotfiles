@@ -8,6 +8,8 @@ zstyle :compinstall filename '/home/$USER/.zshrc'
 autoload -Uz compinit
 compinit
 autoload -U colors && colors
+# ignore case on completion
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 # ctrl-arrow don't work by default on zsh, this makes it so
 bindkey "^[[1;5C" forward-word
@@ -98,3 +100,15 @@ alias gst='git status --short'
 alias apts='apt-cache search --names-only'
 alias maws='aws --profile=metal'
 alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+python_venv() {
+  VENV=./.venv
+  [[ -d $VENV ]] && source $VENV/bin/activate > /dev/null 2>&1
+  [[ ! -d $VENV ]] && deactivate > /dev/null 2>&1
+}
+autoload -U add-zsh-hook
+add-zsh-hook chpwd python_venv
