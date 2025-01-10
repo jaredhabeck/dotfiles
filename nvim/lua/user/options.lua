@@ -40,4 +40,6 @@ vim.opt.exrc = true
 vim.opt.secure = true
 vim.opt.inccommand = 'split'
 
+vim.g.python3_host_prog = vim.fn.expand('$HOME/.pyenv/shims/python3')
+
 vim.cmd([[command! BO silent! execute "%bd|e#|bd#"]])

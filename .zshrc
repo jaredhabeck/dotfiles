@@ -86,6 +86,7 @@ export PATH="$PATH:/opt/nvim-linux64/bin"
 #	psql -h 127.0.0.1 -U $3 -p 5435
 #}
 
+# aliases
 alias vim='$(which nvim)'
 alias cdc='cd /home/$USER/code'
 alias gc='git commit'
@@ -98,12 +99,18 @@ alias glod='git log --oneline'
 alias gp='git push'
 alias gst='git status --short'
 alias apts='apt-cache search --names-only'
-alias maws='aws --profile=metal'
 alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
 
+# filfy javascript
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# end filfy javascript
+
+# holy python
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 python_venv() {
   VENV=./.venv
@@ -112,3 +119,4 @@ python_venv() {
 }
 autoload -U add-zsh-hook
 add-zsh-hook chpwd python_venv
+# end holy python

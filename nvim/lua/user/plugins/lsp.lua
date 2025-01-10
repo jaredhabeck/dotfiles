@@ -48,29 +48,56 @@ return {
       capabilities = capabilities,
     })
 
-    require('lspconfig').ts_ls.setup({
-      init_options = {
-        plugins = {
-          {
-            name = "@vue/typescript-plugin",
-            location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
-            languages = {"javascript", "typescript", "vue"},
-          },
+    local function organize_imports()
+        local params = {
+            command = "_typescript.organizeImports",
+            arguments = { vim.api.nvim_buf_get_name(0) },
+        }
+        vim.lsp.buf.execute_command(params)
+    end
+
+    -- the commands allow to perform an "isort" in a tsfile typing a command ":OrganizeImports" when in a ts/js file
+    require("lspconfig").ts_ls.setup({
+        capabilities = capabilities,
+        commands = {
+            OrganizeImports = {
+                organize_imports,
+                description = "Organize Imports",
+            },
         },
-      },
-      filetypes = {
-        "javascript",
-        "javascriptreact",
-        "javascript.jsx",
-        "typescript",
-        "typescriptreact",
-        "typescript.tsx",
-        "vue",
-      },
     })
+
+    vim.api.nvim_create_autocmd({
+        "BufWritePre",
+    }, {
+        pattern = { "*.js", "*.ts" },
+        callback = function()
+            vim.cmd("OrganizeImports")
+        end,
+    })
+
+    -- linter js (check biome un de ces 4)
+    require("lspconfig").eslint.setup({
+        on_init = function(client)
+            client.config.settings.workingDirectory = { directory = client.config.root_dir }
+        end,
+        on_attach = function(client, bufnr)
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                buffer = bufnr,
+                command = "EslintFixAll",
+            })
+        end,
+    })
+
 
     -- Tailwind CSS
     require('lspconfig').tailwindcss.setup({ capabilities = capabilities })
+
+    require("lspconfig").terraformls.setup({
+        capabilities = capabilities,
+    })
+
+    require("lspconfig").tflint.setup({})
 
     -- JSON
     require('lspconfig').jsonls.setup({
@@ -96,6 +123,43 @@ return {
           }
         }
       }
+    })
+
+    -- Python
+    require("lspconfig").pylsp.setup({
+        capabilities = capabilities,
+        settings = {
+            pylsp = {
+                plugins = {
+                    jedi_completion = {
+                        enabled = true,
+                    },
+                    pydocstyle = {
+                        enabled = false,
+                    },
+                    flake8 = {
+                        enabled = false,
+                    },
+                    mccabe = {
+                        enabled = false,
+                    },
+                    pycodestyle = {
+                        enabled = false,
+                    },
+                },
+            },
+        },
+    })
+
+    -- ruff config is in local folders such as ~/.config/ruff
+    require("lspconfig").ruff.setup({
+        capabilities = capabilities,
+        init_options = {
+            settings = {
+                -- Any extra CLI arguments for `ruff` go here.
+                args = {},
+            },
+        },
     })
 
     -- Keymaps

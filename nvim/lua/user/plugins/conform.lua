@@ -2,11 +2,11 @@ return {
   'stevearc/conform.nvim',
   opts = {
     formatters_by_ft = {
-      php = { "pint" },
+      php = { "./vendor/bin/pint" },
       javascript = { "eslint_d", stop_after_first = true },
       typescript = { "eslint_d", stop_after_first = true },
       typescriptreact = { "eslint_d", stop_after_first = true },
-      python = { "isort", "black" },
+      python = { "ruff_fix", "ruff_format" },
     },
     format_on_save = {
       -- These options will be passed to conform.format()
