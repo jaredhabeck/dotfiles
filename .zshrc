@@ -5,8 +5,7 @@ setopt autocd nomatch notify prompt_subst dotglob
 unsetopt beep extended_glob
 bindkey -e
 zstyle :compinstall filename '/home/$USER/.zshrc'
-autoload -Uz compinit
-compinit
+autoload -Uz compinit && compinit
 autoload -U colors && colors
 # ignore case on completion
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
@@ -77,46 +76,45 @@ zstyle ':vcs_info:git:*' formats       '(%b%u%c)'
 zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
 PROMPT='%F{cyan}%~%f %F{red}${vcs_info_msg_0_}%f %# '
 
+# zsh hook to venv activate on cd if it exists
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd activate_venv
+function activate_venv() {
+    if [ -d .venv ]; then
+        source .venv/bin/activate
+    fi
+}
+
+
 # use non-package nvim
 export PATH="$PATH:/opt/nvim-linux64/bin"
 
-# handy AF tunnel setup, just here as a note to be used further
+# handy AF DB tunnel setup, just here as a note to be used later
 #function db() {
 #        ssh -o ExitOnForwardFailure=yes -f -L 5435:$2:5432 $1 sleep 15
 #	psql -h 127.0.0.1 -U $3 -p 5435
 #}
 
 # aliases
-alias vim='$(which nvim)'
-alias cdc='cd /home/$USER/code'
-alias gc='git commit'
-alias gr='git reset --hard HEAD^'
-alias gcam='git commit -am'
-alias gco='git checkout'
-alias gcob='git checkout -B'
-alias gd='git diff'
-alias glod='git log --oneline'
-alias gp='git push'
-alias gst='git status --short'
-alias apts='apt-cache search --names-only'
-alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+alias vim="$(command -v nvim)"
+alias cdc="cd /home/$USER/code"
+alias gc="git commit"
+alias gr="git reset --hard HEAD^"
+alias gcam="git commit -am"
+alias gco="git checkout"
+alias gcob="git checkout -B"
+alias gd="git diff"
+alias glod="git log --oneline"
+alias gp="git push"
+alias gst="git status --short"
+alias apts="apt-cache search --names-only"
+alias sail="sh $([ -f sail ] && echo sail || echo vendor/bin/sail)"
+alias php7="docker run -it --rm php:7.4-cli php"
+alias nvimc="cd /home/$USER/.config/nvim && $(command -v nvim) ."
+alias ds="python manage.py runserver"
 
 # filfy javascript
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # end filfy javascript
-
-# holy python
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-python_venv() {
-  VENV=./.venv
-  [[ -d $VENV ]] && source $VENV/bin/activate > /dev/null 2>&1
-  [[ ! -d $VENV ]] && deactivate > /dev/null 2>&1
-}
-autoload -U add-zsh-hook
-add-zsh-hook chpwd python_venv
-# end holy python

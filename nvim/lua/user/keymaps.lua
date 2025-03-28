@@ -1,3 +1,4 @@
+-- leader is space
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
